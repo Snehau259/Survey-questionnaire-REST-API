@@ -1,9 +1,7 @@
 package com.learnSpringBootRESTapis.SpringBootRestApis.Questionnaire;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -48,6 +46,11 @@ public class SurveyResource {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         return question;
+    }
+
+    @RequestMapping(value = "/surveys/{surveyId}/questions", method = RequestMethod.POST)
+    public void addNewQuestion(@PathVariable String surveyId, @RequestBody Question question) {
+        surveyService.addNewQuestion(surveyId, question);
     }
 
 }

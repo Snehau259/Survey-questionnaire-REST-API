@@ -2,6 +2,8 @@ package com.learnSpringBootRESTapis.SpringBootRestApis.Questionnaire;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,5 +64,17 @@ public class SurveyService {
             return null;
         return question.get();
 
+    }
+
+    public void addNewQuestion(String surveyId, Question question) {
+        List<Question> questions = retrieveAllQuestions(surveyId);
+        question.setId(generateRandomId());
+        questions.add(question);
+    }
+
+    private static String generateRandomId() {
+        SecureRandom secureRandom = new SecureRandom();
+        String randomId = new BigInteger(32, secureRandom).toString();
+        return randomId;
     }
 }
