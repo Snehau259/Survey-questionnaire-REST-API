@@ -1,23 +1,53 @@
 package com.learnSpringBootRESTapis.SpringBootRestApis.Questionnaire;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class SurveyResource {
 
-     private SurveyService surveyService;
+    private SurveyService surveyService;
 
     public SurveyResource(SurveyService surveyService) {
         this.surveyService = surveyService;
     }
 
     @RequestMapping("/surveys")
-    public List<Survey> retrieveAllData()
-    {
+    public List<Survey> retrieveAllData() {
         return surveyService.retrieveAllData();
     }
+
+    @RequestMapping("/surveys/{surveyId}")
+    public Optional<Survey> retrieveSurveyById(@PathVariable String surveyId) {
+        Optional<Survey> survey = surveyService.retrieveSurveyById(surveyId);
+        if (survey == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return survey;
+    }
+
+    @RequestMapping("/surveys/{surveyId}/questions")
+    public List<Question> retrieveAllQuestions(@PathVariable String surveyId) {
+        List<Question> questions = surveyService.retrieveAllQuestions(surveyId);
+        if (questions == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return questions;
+    }
+
+    @RequestMapping("/surveys/{surveyId}/questions/{questionId}")
+    public Question retrieveQuestionById(@PathVariable String surveyId, @PathVariable String questionId) {
+        Question question = surveyService.retrieveQuestionById(surveyId, questionId);
+        if (question == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return question;
+    }
+
 }

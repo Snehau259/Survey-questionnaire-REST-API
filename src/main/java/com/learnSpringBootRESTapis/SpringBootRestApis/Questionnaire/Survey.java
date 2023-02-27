@@ -3,10 +3,10 @@ package com.learnSpringBootRESTapis.SpringBootRestApis.Questionnaire;
 import java.util.List;
 
 public class Survey {
-private String id;
-private String name;
-private String description;
-private List<Question> questions;
+    private String id;
+    private String name;
+    private String description;
+    private List<Question> questions;
 
     public Survey(String id, String name, String description, List<Question> questions) {
         this.id = id;

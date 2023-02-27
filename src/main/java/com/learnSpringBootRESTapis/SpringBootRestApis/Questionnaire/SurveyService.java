@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Service
 public class SurveyService {
-    private static List<Survey> surveys=new ArrayList<>();
+    private static List<Survey> surveys = new ArrayList<>();
 
     static {
         Question question1 = new Question("Question1",
@@ -32,5 +34,33 @@ public class SurveyService {
 
     public List<Survey> retrieveAllData() {
         return surveys;
+    }
+
+    public Optional<Survey> retrieveSurveyById(String surveyId) {
+        Predicate<? super Survey> predicate = survey -> survey.getId().equalsIgnoreCase(surveyId);
+        Optional<Survey> survey = surveys.stream().filter(predicate).findFirst();
+        if (survey.isEmpty())
+            return null;
+        return survey;
+    }
+
+    public List<Question> retrieveAllQuestions(String surveyId) {
+
+        Optional<Survey> survey = retrieveSurveyById(surveyId);
+        if (survey.isEmpty())
+            return null;
+        return survey.get().getQuestions();
+    }
+
+    public Question retrieveQuestionById(String surveyId, String questionId) {
+        List<Question> questions = retrieveAllQuestions(surveyId);
+        if (questions == null)
+            return null;
+        Predicate<? super Question> predicate = question -> question.getId().equalsIgnoreCase(questionId);
+        Optional<Question> question = questions.stream().filter(predicate).findFirst();
+        if (question.isEmpty())
+            return null;
+        return question.get();
+
     }
 }
