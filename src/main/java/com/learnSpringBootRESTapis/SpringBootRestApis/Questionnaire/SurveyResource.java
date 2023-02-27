@@ -1,6 +1,7 @@
 package com.learnSpringBootRESTapis.SpringBootRestApis.Questionnaire;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -51,6 +52,12 @@ public class SurveyResource {
     @RequestMapping(value = "/surveys/{surveyId}/questions", method = RequestMethod.POST)
     public void addNewQuestion(@PathVariable String surveyId, @RequestBody Question question) {
         surveyService.addNewQuestion(surveyId, question);
+    }
+
+    @RequestMapping(value = "/surveys/{surveyId}/questions/{questionId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteQuestionById(@PathVariable String surveyId, @PathVariable String questionId) {
+        String deletedQuestionId = surveyService.deleteQuestionById(surveyId, questionId);
+        return ResponseEntity.noContent().build();
     }
 
 }

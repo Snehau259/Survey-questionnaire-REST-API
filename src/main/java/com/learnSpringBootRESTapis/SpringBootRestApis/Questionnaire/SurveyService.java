@@ -77,4 +77,16 @@ public class SurveyService {
         String randomId = new BigInteger(32, secureRandom).toString();
         return randomId;
     }
+
+    public String deleteQuestionById(String surveyId, String questionId) {
+        List<Question> questions = retrieveAllQuestions(surveyId);
+        if (questions == null)
+            return null;
+        Predicate<? super Question> predicate = question -> question.getId().equalsIgnoreCase(questionId);
+        boolean removed = questions.removeIf(predicate);
+        if(!removed)
+            return null;
+        return questionId;
+
+    }
 }
